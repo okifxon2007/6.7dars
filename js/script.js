@@ -1,60 +1,94 @@
-let ism = document.querySelector('.ism');
-let button = document.querySelector('.btnn');
-let delet = document.querySelector('#delete');
-let wrapper = document.querySelector('#wrapper')
+let name = document.querySelector('.name');
+let surname = document.querySelector('.surname');
+let age = document.querySelector('.age');
+let button = document.querySelector('.button');
+let wrapper = document.querySelector('.cardd');
+let fimg = document.querySelector('.fimg')
+let form = document.querySelector('.form')
 
-function validate(){
-    if (ism.value.length < 5) {
+function isvalid() {
+    if (name.value.length <3) {
+        alert('kamida 3ta sozdan kop yozing')
+        name.focus();
+        name.style.outlineColor = 'red'
         return false;
-        alert('6tadan kop hardan iborat bolsin');
-        ism.focus();
-        ism.style.outlineColor = 'red'
     }
-    return true
+    if (Number(name.value)) {
+        alert('bu yerga raqam yozmang')
+        name.focus();
+        name.style.outlineColor = 'red'
+    }
+    if (surname.value.length <3) {
+        alert('kamida 3ta sozdan kop yozing')
+        surname.focus();
+        surname.style.outlineColor = 'red'
+        return false;
+    }
+    if (Number(surname.value)) {
+        alert('bu yerga raqam yozmang')
+        surname.focus();
+        surname.style.outlineColor = 'red'
+    }
+
+    if (age.value <7) {
+        alert('yoshingiz kichkina')
+        age.focus();
+        age.style.outlineColor = 'red'
+        return false;
+    }
+    
+    
 }
 
-function creatitem(value){
-    return `
-    
-    <div class="pend" >
-    <p class="ismim">${value}</p>
-    <button class="btnnn" id="#delete">delete</button>
- </div>
-    
+
+function getusers(){
+    let users = [];
+    if (localStorage.getItem('users')) {
+        users = JSON.parse(localStorage.getItem('users'))
+    }
+    return users;
+} 
+
+function createcard(card){
+    return`
+    <div class="new">
+                <img src="${card.fimg}" alt="">
+            <p class="p1">${card.name}</p>
+            <p class="p2">${card.surname}</p>
+            <p class="p3">${card.age}</p>
+            
+            </div>
     `
 }
-function saveitem(value){
-    const todo = {
-        ism:value,
-        id: Date.now()
-    }
-    let data = [];
-    if(localStorage.getItem('todos')){
-        data.JSON.parse(localStorage.getItem('todos'))
-    }
-    data.push(todo);    
-    localStorage.setItem('todos', JSON.stringify(data))
-}
-button && button.addEventListener('click', function(e){
-    e.preventDefault();
-    const isvalid = (validate);
+
+
+button.addEventListener('click', function(event){
+    event.preventDefault();
+    
+    
+
+    let valid = isvalid();
     if (!isvalid) {
         return;
     }
 
-    const item = creatitem(ism.value);
 
-    wrapper.innerHTML += item;
-    ism.value =''
-    ism.focus();
+    let users = getusers()
+    let user = {
+        name: name.value,
+        surname: surname.value,
+        age: age.value,
+        fimg: fimg.value,
+        id: Date.now()
+    }
+
+    users.push(user);
+    localStorage.setItem('users', JSON.stringify(users));
+    form.reset();
 
 
-   
-    
+    let card = createcard(user);
+    const wrapper = document.querySelector('#wrapper');
+    wrapper.innerHTML += card; 
 })
 
-local && local.addEventListener('click', function(e){
-    e.preventDefault();
-    let name = 'okifxon'
-    localStorage.setItem('ism', value)
-})
